@@ -58,4 +58,5 @@ I am speaking very slow. <rate=10>
 * Provide means of posting messages (Need API access)
 * Muting
 * Make it prettier
+* Lookups for emoticons / other punctuation-based slang?
 
