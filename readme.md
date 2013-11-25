@@ -34,8 +34,11 @@ meats debug
 
 ## Special Text-to-Speech Options
 If you want to specify the voice and rate (measured in words per minute) with which your meats are spoken, you can write the following string in your message:
-```<voice={voice} rate={rate}>```
-eg:
+
+```
+<voice={voice} rate={rate}>
+```
+For Example:
 ```
 I am speaking with Kathi @ 150 words per minute <voice=Kathi rate=150>
 ```
