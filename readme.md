@@ -27,9 +27,21 @@ connect to the socket, stream messages and images into the terminal, and speak t
 ```
 meats speak
 ```
-figure out what's broken:
+all other options:
 ```
-meats debug
+  -h, --help            show this help message and exit
+  -x WIDTH, --img-x=WIDTH
+                        width of the image, default=23
+  -y HEIGHT, --img-y=HEIGHT
+                        height of the image, default=15
+  -d DEBUG, --debug=DEBUG
+                        figure out whats broken
+  -s SCREEN_WIDTH, --screen-width=SCREEN_WIDTH
+                        width at which to wrap text, deault=80
+  -a ADDRESS, --address=ADDRESS
+                        the address of the meatspace socket,
+                        default='https://chat.meatspac.es'
+
 ```
 
 ## Special Text-to-Speech Options

@@ -100,7 +100,7 @@ def compile_speedup():
 
     return (xterm256_c.rgb_to_xterm, xterm_to_rgb)
 
-def meat_img(b64_gif, debug, width=20, height=14):
+def meat_img(b64_gif, debug, width, height):
     
     # format string
     b64_gif = b64_gif.split('base64,')[1]
@@ -124,7 +124,7 @@ def meat_img(b64_gif, debug, width=20, height=14):
         (rgb_to_xterm, xterm_to_rgb) = compile_speedup()
     except:
         if debug:
-            print("Failed to compile code, no speedup")
+            print("WARNING: Failed to compile code, no speedup")
 
     frame = getFrame(im, orig_width, orig_height, width, height)
     printImage(frame, width, height)   

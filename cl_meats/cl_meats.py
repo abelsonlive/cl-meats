@@ -6,51 +6,94 @@ import re, os, sys
 from pipes import quote
 from meat_img import meat_img
 from datetime import datetime
-
-# meatspac.es
-ADDRESS = "https://chat.meatspac.es"
+from colors import pretty_output
+import textwrap
 
 # regexes
 URLS = re.compile(r'(https?:\/\/)?((?:\.?[-\w]){1,256})(\.\w{1,10})(?::[0-9]{1,5})?(?:\.?\/(?:[^\s.,?:;!]|[.,?:;!](?!\s|$)){0,2048})?')
 SPEAK_ARGS = re.compile(r"(<(voice=([A-Za-z ]+))?( )?(rate=([0-9]+))?>)")
 
-# say params
+# options for personalization.
 VOICES = ["Alex", "Bruce", "Fred", "Ralph", "Kathy", "Vicki", "Victoria", "Princess"]
 RATES = [170, 175, 180, 185, 190, 195, 200]
+FG_COLORS = ["FG_RED", "FG_GREEN", "FG_YELLOW", "FG_BLUE", "FG_MAGENTA", "FG_CYAN",  "FG_WHITE"]
+BG_COLORS = ["BG_BLACK", "BG_RED", "BG_GREEN", "BG_YELLOW", "BG_BLUE", "BG_MAGENTA", "BG_CYAN",  "BG_WHITE"]
+PUNCT = ["+", "-", "=", "~", "\\", "/", "?", "<", ">", "|", "#", "@", "&"]
 
+# start msg
 START_MSG = """
-#######################################################
-#                       _                             #
-#  _ __ ___   ___  __ _| |_ ___ _ __   __ _  ___ ___  #
-# | '_ ` _ \ / _ \/ _` | __/ __| '_ \ / _` |/ __/ _ \ #
-# | | | | | |  __/ (_| | |_\__ \ |_) | (_| | (_|  __/ #
-# |_| |_| |_|\___|\__,_|\__|___/ .__/ \__,_|\___\___| #
-#                              |_|                    #
-#######################################################
+                       _                             
+  _ __ ___   ___  __ _| |_ ___ _ __   __ _  ___ ___  
+ | '_ ` _ \ / _ \/ _` | __/ __| '_ \ / _` |/ __/ _ \ 
+ | | | | | |  __/ (_| | |_\__ \ |_) | (_| | (_|  __/ 
+ |_| |_| |_|\___|\__,_|\__|___/ .__/ \__,_|\___\___| 
+                              |_|                    
+
+
 """
 
 # HACK - turn a md5 fingerprint into an int
 def fingerprint_to_int(fingerprint):
   return int(re.sub(r'[a-z\-]+', '', fingerprint.lower()).strip())
 
+# helper for `wrap_message`
+def cum_sum_word_length(words):
+  cum_sum = []
+  for i, w in enumerate(words):
+    if i > 0:
+      cum_sum.append(len(w) + cum_sum[i-1])
+    else:
+      cum_sum.append(len(w))
+  return cum_sum
+
 class CLMeats(object):
-  def __init__(self, speak=True, debug=False):
+  def __init__(self, address, speak, height, width, debug, screen_width):
     
     # initialize parameters
+    self.address = address
     self.speak = speak
+    self.height = height
+    self.width = width
     self.debug = debug
+    self.screen_width = screen_width - 4 # add space buffer
     
     # connect to socket
-    socketIO = SocketIO(ADDRESS, 443)
+    socketIO = SocketIO(self.address, 443)
 
     # issue start message
-    print START_MSG 
+    with pretty_output("REVERSE", "BOLD", "FG_MAGENTA") as start:
+      start.write(START_MSG)
 
     # trigger events
     socketIO.on('message', self.on_message)
 
     # wait forever...
     socketIO.wait()
+
+
+  def wrap_message(self, msg):
+    """
+    wrap message to set width
+    """
+    w = self.screen_width
+    lines = textwrap.wrap(msg, w)
+
+    # fill in whitespace, if necessary
+    if len(lines)==1:
+      msg = "  %s  " % lines[0]
+      return msg, len(msg) + 1
+    
+    else:
+      wrapped_lines = []
+      for i, line in enumerate(lines):
+        line = line.strip()
+        if i == 0:
+          wrapped_lines.append("  %s  " % line)
+        else:
+          fill = " " * (w - len(line))
+          wrapped_lines.append("  %s  " % (line + fill))
+
+      return "\r\n".join(wrapped_lines), w + 5
 
   def on_message(self, *args):
  
@@ -62,7 +105,13 @@ class CLMeats(object):
         b64_gif = resp['chat']['value']['media'],
         fingerprint = resp['chat']['value']['fingerprint'].encode('utf-8')
       )
-
+      # hack fingerprint to int
+      bro =  fingerprint_to_int(data['fingerprint'])
+      
+      # assing color and punctuation
+      color = FG_COLORS[bro % len(FG_COLORS)]
+      punct = PUNCT[bro % len(PUNCT)]
+      
       # optionally parse message to speakable version
       if self.speak:
         
@@ -76,33 +125,52 @@ class CLMeats(object):
         if text_to_speak == '':
           text_to_speak = "gif"
 
-        # hack fingerprint to int
-        bro =  fingerprint_to_int(data['fingerprint'])
-
         # assign voice and rate
         voice = VOICES[bro % len(VOICES)]
         rate = RATES[bro % len(RATES)]
-      
+        
         # overwrite text_to_speak with optional in-message speech params
         m = SPEAK_ARGS.search(text_to_speak)
         if m:
-          voice = m.group(3).title().strip() if m.group(2) is not None else voice
-          rate = int(m.group(6).strip()) if m.group(5) is not None else rate
+          voice = m.group(3).title().strip() if m.group(3) is not None else voice
+          rate = m.group(6).strip() if m.group(6) is not None else rate
           text_to_speak = SPEAK_ARGS.sub("", text_to_speak).strip()
           
-          
-
       # remove SPEAK_ARGS from message too
       msg = SPEAK_ARGS.sub("", data['message']).strip()
-
-       # print meat to console
-      meat_img(b64_gif = data['b64_gif'], debug = self.debug)
-      sys.stdout.write(msg)
-      sys.stdout.write("\n\n")
       
-      # speak meat!
+      if msg == '':
+        # it's just a gif if there's no message
+        msg = "<gif>"
+
+      # wrap text
+      msg, n_chars = self.wrap_message(msg)
+
+       # print meat image to console
+      meat_img(
+        b64_gif = data['b64_gif'], 
+        debug = self.debug, 
+        height = self.height, 
+        width = self.width
+      )
+    
+      # break
+      with pretty_output("REVERSE", color) as out:
+        out.write(punct.join([""] * n_chars))
+        out.write(" ".join([""] * n_chars))
+
+      # print message
+      with pretty_output("REVERSE", "BOLD", color) as out:
+        out.write(msg)
+
+      # break
+      with pretty_output("REVERSE", color) as out:
+        out.write(" ".join([""] * n_chars))
+        out.write(punct.join([""] * n_chars))
+      
+      # speak meat! 
       if self.speak:
-        cmd = 'say -v %s -r %d %s' % (voice, rate, quote(text_to_speak))
+        cmd = 'say -v %s -r %s %s' % (quote(voice), quote(str(rate)), quote(text_to_speak))
         os.system(cmd)
       
     except Exception as e:

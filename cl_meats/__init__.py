@@ -1,36 +1,35 @@
 from cl_meats import CLMeats
 import sys
+from optparse import OptionParser
+parser = OptionParser()
 
 def run():
-  # parse args
-  args = sys.argv
+  
+  # start up parser
+  parser = OptionParser()
+  parser.add_option("-x", "--img-x", dest="width",
+                    help="width of the image, default=23", default=23)
+  parser.add_option("-y", "--img-y", dest="height",
+                    help="height of the image, default=15", default=15)
+  parser.add_option("-d", "--debug", dest="debug",
+                    help="figure out whats broken", default=False)
+  parser.add_option("-s", "--screen-width", dest="screen_width",
+                    help="width at which to wrap text, deault=80", default=80)
+  parser.add_option("-a", "--address", dest = "address",
+                    help = "the address of the meatspace socket, default='https://chat.meatspac.es'",
+                    default = "https://chat.meatspac.es")
 
-  if len(args) > 1:
 
-    if args[1]=="speak":
-      speak = True
-    else:
-      speak = False
+  o, args = parser.parse_args()
+  
+  #custom hack for speak
+  speak = any([True if arg.lower()=="speak" else False for i, arg in enumerate(sys.argv)])
 
-    if args[1]=="debug":
-      debug = True
-    else:
-      debug = False
-
-  elif len(args) > 2:
-
-    if args[2]=="speak":
-      speak = True
-    else:
-      speak = False
-
-    if args[2]=="debug":
-      debug = True
-    else:
-      debug = False
-
-  else:
-    speak = False
-    debug = False
-
-  meats = CLMeats(speak, debug)
+  meats = CLMeats(
+            address = o.address,
+            speak = speak, 
+            height = int(o.height),
+            width = int(o.width), 
+            debug = o.debug,
+            screen_width = int(o.screen_width)
+          )
