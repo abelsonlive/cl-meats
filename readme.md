@@ -14,15 +14,16 @@ pip install requirements.txt
 ## Install
 ```
 git clone https://github.com/abelsonlive/cl-meats.git
+cd cl-meats
 python setup.py install
 ```
 
 ## Usage
-connect to the socket and steam messages and images into the terminal:
+connect to the socket and stream messages and images into the terminal:
 ```
 meats
 ```
-connect to the socket, stream messages into the terminal, and speak text:
+connect to the socket, stream messages and images into the terminal, and speak text:
 ```
 meats speak
 ```
@@ -30,23 +31,21 @@ figure out what's broken:
 ```
 meats debug
 ```
-speak and debug:
-```
-meats speak debug
-```
 
 ## Special Text-to-Speech Options
 If you want to specify the voice and rate (measured in words per minute) with which your meats are spoken, you can write the following string in your message:
 ```
-<voice=Kathi rate=150>
+I am speaking with Kathi @ 150 words per minute <voice=Kathi rate=150>
 ```
 or just the voice (default rate is 170)
 ```
-<voice=Kathi>
+I am speaking with Princess
+<voice=Princess>
 ```
 or just the rate (Voice will default to the one your fingerprint was assigned)
 ```
-<rate=1000>
+I am speaking very slow.
+<rate=10>
 ```
 
 ## Todo
