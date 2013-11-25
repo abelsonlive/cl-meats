@@ -34,18 +34,18 @@ meats debug
 
 ## Special Text-to-Speech Options
 If you want to specify the voice and rate (measured in words per minute) with which your meats are spoken, you can write the following string in your message:
+```<voice={voice} rate={rate}>```
+eg:
 ```
 I am speaking with Kathi @ 150 words per minute <voice=Kathi rate=150>
 ```
 or just the voice (default rate is 170)
 ```
-I am speaking with Princess
-<voice=Princess>
+I am speaking with Princess <voice=Princess>
 ```
 or just the rate (Voice will default to the one your fingerprint was assigned)
 ```
-I am speaking very slow.
-<rate=10>
+I am speaking very slow. <rate=10>
 ```
 
 ## Todo
