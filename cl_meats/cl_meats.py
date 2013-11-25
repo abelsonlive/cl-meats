@@ -88,7 +88,7 @@ class CLMeats(object):
         if m:
           voice = m.group(3).title().strip() if m.group(2) is not None else voice
           rate = int(m.group(6).strip()) if m.group(5) is not None else rate
-          text_to_speak = SPEECH.sub("", text_to_speak).strip()
+          text_to_speak = SPEAK_ARGS.sub("", text_to_speak).strip()
 
       # print meat to console
       meat_img(b64_gif=data['b64_gif'], debug=self.debug)
