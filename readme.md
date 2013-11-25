@@ -52,9 +52,10 @@ I am speaking very slow. <rate=10>
 ```
 
 ## Todo
-[] Figure out how to properly display animated gifs in the terminal
-[] Improve image resolution
-[] Provide means of posting messages (Need API access)
-[] Muting
-[] Make it prettier
+
+* Figure out how to properly display animated gifs in the terminal
+* Improve image resolution
+* Provide means of posting messages (Need API access)
+* Muting
+* Make it prettier
 
