@@ -36,16 +36,6 @@ START_MSG = """
 def fingerprint_to_int(fingerprint):
   return int(re.sub(r'[a-z\-]+', '', fingerprint.lower()).strip())
 
-# helper for `wrap_message`
-def cum_sum_word_length(words):
-  cum_sum = []
-  for i, w in enumerate(words):
-    if i > 0:
-      cum_sum.append(len(w) + cum_sum[i-1])
-    else:
-      cum_sum.append(len(w))
-  return cum_sum
-
 class CLMeats(object):
   def __init__(self, address, speak, height, width, debug, screen_width):
     
@@ -87,11 +77,8 @@ class CLMeats(object):
       wrapped_lines = []
       for i, line in enumerate(lines):
         line = line.strip()
-        if i == 0:
-          wrapped_lines.append("  %s  " % line)
-        else:
-          fill = " " * (w - len(line))
-          wrapped_lines.append("  %s  " % (line + fill))
+        fill = " " * (w - len(line))
+        wrapped_lines.append("  %s  " % (line + fill))
 
       return "\r\n".join(wrapped_lines), w + 5
 
