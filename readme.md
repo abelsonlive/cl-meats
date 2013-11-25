@@ -40,7 +40,7 @@ If you want to specify the voice and rate (measured in words per minute) with wh
 ```
 For Example:
 ```
-I am speaking with Kathi @ 150 words per minute <voice=Kathi rate=150>
+I am speaking with Kathi @ 150 words per minute <voice=Kathy rate=150>
 ```
 or just the voice (default rate is 170)
 ```
