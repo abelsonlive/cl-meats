@@ -168,8 +168,8 @@ class CLMeats(object):
       
       # speak meat! 
       if self.speak:
-        args = (quote(str(voice)), quote(str(rate)), quote(str(text_to_speak))
-        cmd = 'say -v %s -r %s %s &' % args)
+        args = (quote(str(voice)), quote(str(rate)), quote(str(text_to_speak)))
+        cmd = 'say -v %s -r %s %s &' % args
         os.system(cmd)
       
     except Exception as e:
