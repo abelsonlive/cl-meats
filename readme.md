@@ -1,6 +1,6 @@
 cl-meats (wip)
 =======
-<img src="https://dl.dropboxusercontent.com/u/6535582/meats.png" height="500px">
+<img src="https://dl.dropboxusercontent.com/u/6535582/meats2.png" width="600px">
 
 `cl-meats` is a command line tool for [chat.meatspac.es](chat.meatspac.es). For each new message it currently:
 
