@@ -2,6 +2,7 @@ cl-meats (wip)
 =======
 <img src="https://dl.dropboxusercontent.com/u/6535582/meats2.png" width="600px">
 <img src="https://dl.dropboxusercontent.com/u/6535582/meats3.png" width="600px">
+<br></br>
 `cl-meats` is an expressive command line tool for [chat.meatspac.es](chat.meatspac.es). For each new message it currently:
 
 1. Displays a super lo-res image in your terminal (not animated yet).
@@ -33,14 +34,23 @@ all other options:
 ```
 Options:
   -h, --help            show this help message and exit
-  -x WIDTH, --img-x=WIDTH
-                        width of the image, default=33
-  -y HEIGHT, --img-y=HEIGHT
-                        height of the image, default=25
+  -m MESSAGE, --message=MESSAGE
+                        wheter or not to print message, default=True
+  -b MESSAGE_BUFFER, --message-buffer=MESSAGE_BUFFER
+                        wheter or not to print out the message buffer,
+                        default=True
+  -g GIF, --gif=GIF     whether or not to print the image, default=True
+  -x WIDTH, --gif-width=WIDTH
+                        width of the image, default=40
+  -y HEIGHT, --gif-height=HEIGHT
+                        height of the image, default=30
   -d DEBUG, --debug=DEBUG
-                        figure out whats broken
+                        figure out whats broken, default=False
   -s SCREEN_WIDTH, --screen-width=SCREEN_WIDTH
-                        width at which to wrap text, deault=60
+                        width at which to wrap text, default=40
+  -f SPEED, --speed=SPEED
+                        increase or decrease speed on a linear scale,
+                        default=1
   -a ADDRESS, --address=ADDRESS
                         the address of the meatspace socket,
                         default='https://chat.meatspac.es'
@@ -50,11 +60,11 @@ Options:
 
 ```
 
-## Fun settings:
-Stretches the images horizonal and removes images createing a stream of pixelated colors
+## Make art with `cl-meats`:
+Stretches the images horizonal, removes messages and message buffers, speaks messages super slowly and concurrently
 
 ```
-meats speak -x 150 -y 8 -s 150 -f 0.2 -c True
+meats speak -x 170 -y 5 -s 170 -m False -b False -f 0.2 -c True
 ```
 
 ## Special Text-to-Speech Options
