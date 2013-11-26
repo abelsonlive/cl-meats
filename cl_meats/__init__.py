@@ -8,17 +8,16 @@ def run():
   # start up parser
   parser = OptionParser()
   parser.add_option("-x", "--img-x", dest="width",
-                    help="width of the image, default=23", default=23)
+                    help="width of the image, default=33", default=30)
   parser.add_option("-y", "--img-y", dest="height",
-                    help="height of the image, default=15", default=15)
+                    help="height of the image, default=25", default=23)
   parser.add_option("-d", "--debug", dest="debug",
                     help="figure out whats broken", default=False)
   parser.add_option("-s", "--screen-width", dest="screen_width",
-                    help="width at which to wrap text, deault=80", default=80)
+                    help="width at which to wrap text, deault=60", default=60)
   parser.add_option("-a", "--address", dest = "address",
                     help = "the address of the meatspace socket, default='https://chat.meatspac.es'",
                     default = "https://chat.meatspac.es")
-
 
   o, args = parser.parse_args()
   

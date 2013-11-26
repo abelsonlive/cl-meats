@@ -15,7 +15,7 @@ SPEAK_ARGS = re.compile(r"(<(voice=([A-Za-z ]+))?( )?(rate=([0-9]+))?>)")
 
 # options for personalization.
 VOICES = ["Alex", "Bruce", "Fred", "Ralph", "Kathy", "Vicki", "Victoria", "Princess"]
-RATES = [170, 175, 180, 185, 190, 195, 200]
+RATES = [180, 185, 190, 195, 200, 205, 210]
 FG_COLORS = ["FG_RED", "FG_GREEN", "FG_YELLOW", "FG_BLUE", "FG_MAGENTA", "FG_CYAN",  "FG_WHITE"]
 BG_COLORS = ["BG_BLACK", "BG_RED", "BG_GREEN", "BG_YELLOW", "BG_BLUE", "BG_MAGENTA", "BG_CYAN",  "BG_WHITE"]
 PUNCT = ["+", "-", "=", "~", "\\", "/", "?", "<", ">", "|", "#", "@", "&"]
@@ -65,22 +65,32 @@ class CLMeats(object):
     """
     wrap message to set width
     """
-    w = self.screen_width
-    lines = textwrap.wrap(msg, w)
+    max_width = self.screen_width
+    lines = textwrap.wrap(msg, max_width)
 
-    # fill in whitespace, if necessary
+    # return single line
     if len(lines)==1:
       msg = "  %s  " % lines[0]
-      return msg, len(msg) + 1
-    
+
+      # don't pad posts that are wider than image
+      if len(msg) > self.width:
+        return msg, len(msg) + 1
+
+      # pad posts that aren't wider than image
+      else:
+        fill = " " * (self.width - len(msg))
+        msg += fill
+        return msg, len(msg) + 1
+
+    # fill in whitespace
     else:
       wrapped_lines = []
       for i, line in enumerate(lines):
         line = line.strip()
-        fill = " " * (w - len(line))
+        fill = " " * (max_width - len(line))
         wrapped_lines.append("  %s  " % (line + fill))
-
-      return "\r\n".join(wrapped_lines), w + 5
+        
+      return "\r\n".join(wrapped_lines), max_width + 5
 
   def on_message(self, *args):
  
@@ -96,7 +106,8 @@ class CLMeats(object):
       bro =  fingerprint_to_int(data['fingerprint'])
       
       # assing color and punctuation
-      color = FG_COLORS[bro % len(FG_COLORS)]
+      bgcol = FG_COLORS[bro % len(FG_COLORS)]
+      txtcol = BG_COLORS[bro % len(FG_COLORS)]
       punct = PUNCT[bro % len(PUNCT)]
       
       # optionally parse message to speakable version
@@ -142,22 +153,22 @@ class CLMeats(object):
       )
     
       # break
-      with pretty_output("REVERSE", color) as out:
+      with pretty_output("REVERSE", bgcol, txtcol) as out:
         out.write(punct.join([""] * n_chars))
         out.write(" ".join([""] * n_chars))
 
       # print message
-      with pretty_output("REVERSE", "BOLD", color) as out:
+      with pretty_output("REVERSE", "BOLD", bgcol) as out:
         out.write(msg)
 
       # break
-      with pretty_output("REVERSE", color) as out:
+      with pretty_output("REVERSE", bgcol, txtcol) as out:
         out.write(" ".join([""] * n_chars))
         out.write(punct.join([""] * n_chars))
       
       # speak meat! 
       if self.speak:
-        cmd = 'say -v %s -r %s %s' % (quote(voice), quote(str(rate)), quote(text_to_speak))
+        cmd = 'say -v %s -r %s %s' % (quote(str(voice)), quote(str(rate)), quote(str(text_to_speak)))
         os.system(cmd)
       
     except Exception as e:

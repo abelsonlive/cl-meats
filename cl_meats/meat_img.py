@@ -61,10 +61,11 @@ def printImage(im, width, height):
             printPixels(p1, p2)
         print('\x1b[0m')
 
-def iterateImages(im):
+def iterateImages(im, orig_width, orig_height, width, height):
 
     while True:
-        printImage(getFrame(im))
+        frame = getFrame(im, orig_width, orig_height, width, height)
+        printImage(frame, width, height)
         try:
             im.seek(im.tell()+1)
         except EOFError:
@@ -127,6 +128,8 @@ def meat_img(b64_gif, debug, width, height):
             print("WARNING: Failed to compile code, no speedup")
 
     frame = getFrame(im, orig_width, orig_height, width, height)
-    printImage(frame, width, height)   
+    printImage(frame, width, height)
+    # print "gif:"
+    # iterateImages(im, orig_width, orig_height, width, height) 
 
 
