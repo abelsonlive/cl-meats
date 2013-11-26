@@ -70,7 +70,7 @@ class CLMeats(object):
 
   def welcome(self):
     
-    with pretty_output("REVERSE", "BOLD", "FG_MAGENTA") as start:
+    with pretty_output("BOLD", "FG_MAGENTA") as start:
       start.write(logo) 
   
 
