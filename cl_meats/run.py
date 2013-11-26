@@ -51,7 +51,7 @@ def run():
             gif = o.gif,
             message = o.message,
             message_buffer = o.message_buffer,
-            screen_width = o.screen_width,
+            screen_width = int(o.screen_width),
             height = int(o.height),
             width = int(o.width), 
             speak = speak,
