@@ -70,7 +70,7 @@ class CLMeats(object):
 
     # return single line
     if len(lines)==1:
-      msg = "  %s  " % lines[0]
+      msg = "  %s  " % lines[0].strip()
 
       # don't pad posts that are wider than image
       if len(msg) > self.width:
@@ -168,7 +168,8 @@ class CLMeats(object):
       
       # speak meat! 
       if self.speak:
-        cmd = 'say -v %s -r %s %s' % (quote(str(voice)), quote(str(rate)), quote(str(text_to_speak)))
+        args = (quote(str(voice)), quote(str(rate)), quote(str(text_to_speak))
+        cmd = 'say -v %s -r %s %s &' % args)
         os.system(cmd)
       
     except Exception as e:
