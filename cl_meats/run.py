@@ -7,19 +7,34 @@ def run():
   parser = OptionParser()
 
   # add options
-  parser.add_option("-x", "--img-x", dest="width",
+  parser.add_option("-m", "--message", dest="message",
+                    help="wheter or not to print message", default=True)
+
+  parser.add_option("-b", "--message-buffer", dest="message_buffer",
+                    help="wheter or not to print out the message buffer", default=True)
+
+  parser.add_option("-g", "--gif", dest="gif",
+                    help="whether or not to print the image", default=True)
+
+  parser.add_option("-x", "--gif-width", dest="width",
                     help="width of the image, default=33", default=40)
-  parser.add_option("-y", "--img-y", dest="height",
+
+  parser.add_option("-y", "--gif-height", dest="height",
                     help="height of the image, default=25", default=30)
+
   parser.add_option("-d", "--debug", dest="debug",
                     help="figure out whats broken", default=False)
+
   parser.add_option("-s", "--screen-width", dest="screen_width",
                     help="width at which to wrap text, deault=60", default=40)
-  parser.add_option("-f", "--speed", dest="speed",
+
+  parser.add_option("-f", "--scalepeed", dest="speed",
                     help="increase or decrease speed on a linear scale, deault=1", default=1)
+
   parser.add_option("-a", "--address", dest = "address",
                     help = "the address of the meatspace socket, default='https://chat.meatspac.es'",
                     default = "https://chat.meatspac.es")
+
   parser.add_option("-c", "--chorus", dest = "chorus",
                     help = "Whether or not to play voices as background processes, default=False",
                     default = False)
@@ -31,12 +46,16 @@ def run():
   speak = any([True if arg.lower()=="speak" else False for i, arg in enumerate(sys.argv)])
 
   meats = CLMeats(
+
             address = o.address,
+            gif = o.gif,
+            message = o.message,
+            message_buffer = o.message_buffer,
+            screen_width = o.screen_width,
+            height = int(o.height),
+            width = int(o.width), 
             speak = speak,
             speed = float(o.speed),
             chorus = o.chorus,
-            height = int(o.height),
-            width = int(o.width), 
-            debug = o.debug,
-            screen_width = int(o.screen_width)
+            debug = o.debug
         )

@@ -1,12 +1,12 @@
 cl-meats (wip)
 =======
 <img src="https://dl.dropboxusercontent.com/u/6535582/meats2.png" width="600px">
-
-`cl-meats` is a command line tool for [chat.meatspac.es](chat.meatspac.es). For each new message it currently:
+<img src="https://dl.dropboxusercontent.com/u/6535582/meats3.png" width="600px">
+`cl-meats` is an expressive command line tool for [chat.meatspac.es](chat.meatspac.es). For each new message it currently:
 
 1. Displays a super lo-res image in your terminal (not animated yet).
-2. Prints out the chat message
-3. (optional) Speaks the message via `say`
+2. Prints out the chat message, colored and styled according to user.
+3. (optional) Speaks the message via `say` in a unique-ish voice for each user
 
 ## Requirements
 ```
@@ -48,6 +48,13 @@ Options:
                         Whether or not to play voices as background processes,
                         default=False
 
+```
+
+## Fun settings:
+Stretches the images horizonal and removes images createing a stream of pixelated colors
+
+```
+meats speak -x 150 -y 8 -s 150 -f 0.2 -c True
 ```
 
 ## Special Text-to-Speech Options

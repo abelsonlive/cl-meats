@@ -28,17 +28,32 @@ RATES = [160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220]
 # cl tool for meatspac.es
 class CLMeats(object):
 
-  def __init__(self, address, speak, speed, chorus, height, width, debug, screen_width):
+  def __init__(
+      self, 
+      address, 
+      gif,
+      message,
+      message_buffer,
+      screen_width,
+      height, 
+      width, 
+      speak, 
+      speed,
+      chorus, 
+      debug):
     
     # initialize parameters
     self.address = address
+    self.gif = gif
+    self.message = message
+    self.message_buffer =  message_buffer
+    self.screen_width = screen_width - 4 # add space buffer
+    self.height = height
+    self.width = width
     self.speak = speak
     self.speed = speed
     self.chorus = chorus
-    self.height = height
-    self.width = width
     self.debug = debug
-    self.screen_width = screen_width - 4 # add space buffer
     
     # connect to socket
     socketIO = SocketIO(self.address, 443)
@@ -78,11 +93,15 @@ class CLMeats(object):
 
   def bro_attributes(self, bro):
     
-    # assign color, punctuation, voice, and rate
+    # assign colors voice, and rate
     bgcol = FG_COLORS[bro % len(FG_COLORS)]
     txtcol = BG_COLORS[bro % len(FG_COLORS)]
-    punct = PUNCT[bro % len(PUNCT)]
     
+    # two punctuation symbols
+    punct1 = PUNCT[bro % len(PUNCT)]
+    punct2 = PUNCT[bro % (len(PUNCT)-1)]
+    punct = punct1 + punct2
+
     # assign voice
     voice = VOICES[bro % len(VOICES)]
 
@@ -91,6 +110,93 @@ class CLMeats(object):
     rate = scaled_rates[bro % len(scaled_rates)] 
 
     return bgcol, txtcol, punct, voice, rate 
+
+
+ 
+  def clean_message(self, message):
+    
+    # remove SPEECH_ARGS from message too
+    msg = SPEECH_ARGS.sub("", message).strip()
+      
+    if msg == '':
+      # it's just a gif if there's no message
+      msg = "<gif>"
+
+    return msg
+
+
+  def display_image(self, b64):
+    
+    if self.gif:
+
+      # print meat image to console
+      meat_img(
+        b64 = b64, 
+        debug = self.debug, 
+        height = self.height, 
+        width = self.width
+      )
+
+
+  def wrap_message(self, msg):
+    """
+    wrap message to set width
+    """
+    max_width = self.screen_width
+    lines = textwrap.wrap(msg, max_width)
+
+    # return single line
+    if len(lines)==1:
+
+      msg = "  %s  " % lines[0].strip()
+
+      # don't pad posts that are wider than image
+      if len(msg) > self.width:                                                         
+
+        return msg, len(msg) + 1
+
+      # pad posts that aren't wider than image
+      else:
+
+        fill = " " * (self.width - len(msg))
+        msg += fill
+        return msg, len(msg) + 1
+
+    # fill in whitespace
+    else:
+
+      wrapped_lines = []
+
+      for i, line in enumerate(lines):
+
+        line = line.strip()
+        fill = " " * (max_width - len(line))
+        wrapped_lines.append("  %s  " % (line + fill))
+        
+      return "\r\n".join(wrapped_lines), max_width + 5
+
+
+  def display_message(self, msg, n_chars, punct, bgcol, txtcol):
+    
+    buffer_out = pretty_output("REVERSE", bgcol, txtcol)
+    msg_out = pretty_output("REVERSE", "BOLD", bgcol)
+
+    half = (n_chars/2) + 1
+
+    if str(self.message_buffer)=='True' and str(self.message)=='True': # weird i have to specify ==True
+
+      buffer_out.write(punct.join([""] * half))
+      msg_out.write(msg)
+      buffer_out.write(punct.join([""] * half))
+    
+    elif str(self.message)=='True' and str(self.message_buffer)=='False':
+
+      msg_out.write(msg)
+    
+    elif str(self.message_buffer)=='True' and str(self.message)=='False':
+
+      buffer_out.write(punct.join([""] * half))
+      buffer_out.write(punct.join([""] * half))
 
 
   def clean_text_for_speech(self, text):
@@ -114,77 +220,6 @@ class CLMeats(object):
     rate = m.group(6).strip() if m.group(6) is not None else rate
     text_to_speak = SPEECH_ARGS.sub("", text_to_speak).strip()
     return voice, rate, text_to_speak
-
-
-  def clean_message(self, message):
-    
-    # remove SPEECH_ARGS from message too
-    msg = SPEECH_ARGS.sub("", message).strip()
-      
-    if msg == '':
-      # it's just a gif if there's no message
-      msg = "<gif>"
-
-    return msg
-
-
-  def display_image(self, b64):
-    
-    # print meat image to console
-    meat_img(
-      b64 = b64, 
-      debug = self.debug, 
-      height = self.height, 
-      width = self.width
-    )
-
-
-  def wrap_message(self, msg):
-    """
-    wrap message to set width
-    """
-    max_width = self.screen_width
-    lines = textwrap.wrap(msg, max_width)
-
-    # return single line
-    if len(lines)==1:
-      msg = "  %s  " % lines[0].strip()
-
-      # don't pad posts that are wider than image
-      if len(msg) > self.width:
-        return msg, len(msg) + 1
-
-      # pad posts that aren't wider than image
-      else:
-        fill = " " * (self.width - len(msg))
-        msg += fill
-        return msg, len(msg) + 1
-
-    # fill in whitespace
-    else:
-      wrapped_lines = []
-      for i, line in enumerate(lines):
-        line = line.strip()
-        fill = " " * (max_width - len(line))
-        wrapped_lines.append("  %s  " % (line + fill))
-        
-      return "\r\n".join(wrapped_lines), max_width + 5
-
-
-  def display_message(self, msg, n_chars, punct, bgcol, txtcol):
-    
-    with pretty_output("REVERSE", bgcol, txtcol) as out:
-      out.write(punct.join([""] * n_chars))
-      # out.write(" ".join([""] * n_chars))
-
-    # print message
-    with pretty_output("REVERSE", "BOLD", bgcol) as out:
-      out.write(msg)
-
-    # break
-    with pretty_output("REVERSE", bgcol, txtcol) as out:
-      # out.write(" ".join([""] * n_chars))
-      out.write(punct.join([""] * n_chars))
  
 
   def speak_message(self, voice, rate, text_to_speak):
@@ -208,6 +243,7 @@ class CLMeats(object):
  
     # parse response and upsert data
     try:
+
       data = self.parse_socket(args)
 
       # hack fingerprint to int
@@ -219,10 +255,11 @@ class CLMeats(object):
         
         # clean text
         text_to_speak = self.clean_text_for_speech(data['message'])
-        
+
         # parse speech args
         m = SPEECH_ARGS.search(text_to_speak)
         if m:
+
           voice, rate, text_to_speak = self.parse_speech_args(m)
 
       # clean message
@@ -236,6 +273,7 @@ class CLMeats(object):
       self.display_message(msg, n_chars, punct, bgcol, txtcol)
       
       if self.speak:
+
         # speak
         self.speak_message(voice, rate, text_to_speak)
       
