@@ -37,11 +37,12 @@ def fingerprint_to_int(fingerprint):
   return int(re.sub(r'[a-z\-]+', '', fingerprint.lower()).strip())
 
 class CLMeats(object):
-  def __init__(self, address, speak, height, width, debug, screen_width):
+  def __init__(self, address, speak, chorus, height, width, debug, screen_width):
     
     # initialize parameters
     self.address = address
     self.speak = speak
+    self.chorus = chorus
     self.height = height
     self.width = width
     self.debug = debug
@@ -169,7 +170,9 @@ class CLMeats(object):
       # speak meat! 
       if self.speak:
         args = (quote(str(voice)), quote(str(rate)), quote(str(text_to_speak)))
-        cmd = 'say -v %s -r %s %s &' % args
+        cmd = 'say -v %s -r %s %s' % args
+        if self.chorus:
+          cmd += " &"
         os.system(cmd)
       
     except Exception as e:

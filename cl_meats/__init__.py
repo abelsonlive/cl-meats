@@ -18,6 +18,9 @@ def run():
   parser.add_option("-a", "--address", dest = "address",
                     help = "the address of the meatspace socket, default='https://chat.meatspac.es'",
                     default = "https://chat.meatspac.es")
+  parser.add_option("-c", "--chorus", dest = "chorus",
+                    help = "Whether or not to play voices as background processes, default=False",
+                    default = False)
 
   o, args = parser.parse_args()
   
@@ -27,6 +30,7 @@ def run():
   meats = CLMeats(
             address = o.address,
             speak = speak, 
+            chorus = o.chorus,
             height = int(o.height),
             width = int(o.width), 
             debug = o.debug,
