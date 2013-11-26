@@ -31,18 +31,22 @@ meats speak
 ```
 all other options:
 ```
+Options:
   -h, --help            show this help message and exit
   -x WIDTH, --img-x=WIDTH
-                        width of the image, default=23
+                        width of the image, default=33
   -y HEIGHT, --img-y=HEIGHT
-                        height of the image, default=15
+                        height of the image, default=25
   -d DEBUG, --debug=DEBUG
                         figure out whats broken
   -s SCREEN_WIDTH, --screen-width=SCREEN_WIDTH
-                        width at which to wrap text, deault=80
+                        width at which to wrap text, deault=60
   -a ADDRESS, --address=ADDRESS
                         the address of the meatspace socket,
                         default='https://chat.meatspac.es'
+  -c CHORUS, --chorus=CHORUS
+                        Whether or not to play voices as background processes,
+                        default=False
 
 ```
 
