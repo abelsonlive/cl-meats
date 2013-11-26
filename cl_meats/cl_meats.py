@@ -156,7 +156,7 @@ class CLMeats(object):
       # break
       with pretty_output("REVERSE", bgcol, txtcol) as out:
         out.write(punct.join([""] * n_chars))
-        out.write(" ".join([""] * n_chars))
+        # out.write(" ".join([""] * n_chars))
 
       # print message
       with pretty_output("REVERSE", "BOLD", bgcol) as out:
@@ -164,7 +164,7 @@ class CLMeats(object):
 
       # break
       with pretty_output("REVERSE", bgcol, txtcol) as out:
-        out.write(" ".join([""] * n_chars))
+        # out.write(" ".join([""] * n_chars))
         out.write(punct.join([""] * n_chars))
       
       # speak meat! 
