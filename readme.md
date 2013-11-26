@@ -30,8 +30,10 @@ connect to the socket, stream messages and images into the terminal, and speak t
 ```
 meats speak
 ```
-all other options:
+all other options (accessed by `meats --help`)
 ```
+Usage: meats [options]
+
 Options:
   -h, --help            show this help message and exit
   -m MESSAGE, --message=MESSAGE
@@ -49,7 +51,7 @@ Options:
   -s SCREEN_WIDTH, --screen-width=SCREEN_WIDTH
                         width at which to wrap text, default=40
   -f SPEED, --speed=SPEED
-                        increase or decrease speed on a linear scale,
+                        increase or decrease speech speed on a linear scale,
                         default=1
   -a ADDRESS, --address=ADDRESS
                         the address of the meatspace socket,
@@ -57,7 +59,6 @@ Options:
   -c CHORUS, --chorus=CHORUS
                         Whether or not to play voices as background processes,
                         default=False
-
 ```
 
 ## Make art with `cl-meats`:

@@ -29,7 +29,7 @@ def run():
                     help="width at which to wrap text, default=40", default=40)
 
   parser.add_option("-f", "--speed", dest="speed",
-                    help="increase or decrease speed on a linear scale, default=1", default=1)
+                    help="increase or decrease speech speed on a linear scale, default=1", default=1)
 
   parser.add_option("-a", "--address", dest = "address",
                     help = "the address of the meatspace socket, default='https://chat.meatspac.es'",
