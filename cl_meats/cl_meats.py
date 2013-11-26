@@ -127,7 +127,7 @@ class CLMeats(object):
 
   def display_image(self, b64):
     
-    if self.gif:
+    if str(self.gif)=="True":
 
       # print meat image to console
       meat_img(

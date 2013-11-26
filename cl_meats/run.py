@@ -8,28 +8,28 @@ def run():
 
   # add options
   parser.add_option("-m", "--message", dest="message",
-                    help="wheter or not to print message", default=True)
+                    help="wheter or not to print message, default=True", default=True)
 
   parser.add_option("-b", "--message-buffer", dest="message_buffer",
-                    help="wheter or not to print out the message buffer", default=True)
+                    help="wheter or not to print out the message buffer, default=True", default=True)
 
   parser.add_option("-g", "--gif", dest="gif",
-                    help="whether or not to print the image", default=True)
+                    help="whether or not to print the image, default=True", default=True)
 
   parser.add_option("-x", "--gif-width", dest="width",
-                    help="width of the image, default=33", default=40)
+                    help="width of the image, default=40", default=40)
 
   parser.add_option("-y", "--gif-height", dest="height",
-                    help="height of the image, default=25", default=30)
+                    help="height of the image, default=30", default=30)
 
   parser.add_option("-d", "--debug", dest="debug",
-                    help="figure out whats broken", default=False)
+                    help="figure out whats broken, default=False", default=False)
 
   parser.add_option("-s", "--screen-width", dest="screen_width",
-                    help="width at which to wrap text, deault=60", default=40)
+                    help="width at which to wrap text, default=40", default=40)
 
   parser.add_option("-f", "--speed", dest="speed",
-                    help="increase or decrease speed on a linear scale, deault=1", default=1)
+                    help="increase or decrease speed on a linear scale, default=1", default=1)
 
   parser.add_option("-a", "--address", dest = "address",
                     help = "the address of the meatspace socket, default='https://chat.meatspac.es'",
