@@ -28,7 +28,7 @@ def run():
   parser.add_option("-s", "--screen-width", dest="screen_width",
                     help="width at which to wrap text, deault=60", default=40)
 
-  parser.add_option("-f", "--scalepeed", dest="speed",
+  parser.add_option("-f", "--speed", dest="speed",
                     help="increase or decrease speed on a linear scale, deault=1", default=1)
 
   parser.add_option("-a", "--address", dest = "address",
