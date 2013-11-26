@@ -122,7 +122,7 @@ class CLMeats(object):
 
         # say "gif" for empty message
         if text_to_speak == '':
-          text_to_speak = "gif"
+          text_to_speak = "jif"
 
         # assign voice and rate
         voice = VOICES[bro % len(VOICES)]
