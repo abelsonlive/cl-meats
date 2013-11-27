@@ -18,18 +18,18 @@ BASIC16 = ((0, 0, 0), (205, 0, 0), (0, 205, 0), (205, 205, 0),
 def xterm_to_rgb(xcolor):
   assert 0 <= xcolor <= 255
   if xcolor < 16:
-      # basic colors
-      return BASIC16[xcolor]
+    # basic colors
+    return BASIC16[xcolor]
   elif 16 <= xcolor <= 231:
-      # color cube
-      xcolor -= 16
-      return (CUBE_STEPS[(xcolor / 36) % 6],
-              CUBE_STEPS[(xcolor / 6) % 6],
-              CUBE_STEPS[xcolor % 6])
+    # color cube
+    xcolor -= 16
+    return (CUBE_STEPS[(xcolor / 36) % 6],
+            CUBE_STEPS[(xcolor / 6) % 6],
+            CUBE_STEPS[xcolor % 6])
   elif 232 <= xcolor <= 255:
-      # gray tone
-      c = 8 + (xcolor - 232) * 0x0A
-      return (c, c, c)
+    # gray tone
+    c = 8 + (xcolor - 232) * 0x0A
+    return (c, c, c)
 
 COLOR_TABLE = [xterm_to_rgb(i) for i in xrange(256)]
 
@@ -55,11 +55,11 @@ def printPixels(rgb1,rgb2):
 
 def printImage(im, width, height):
   for y in range(0,height-1,2):
-      for x in range(width):
-          p1 = im.getpixel((x,y))
-          p2 = im.getpixel((x,y+1))
-          printPixels(p1, p2)
-      print('\x1b[0m')
+    for x in range(width):
+      p1 = im.getpixel((x,y))
+      p2 = im.getpixel((x,y+1))
+      printPixels(p1, p2)
+    print('\x1b[0m')
 
 def iterateImages(im, orig_width, orig_height, width, height):
   
@@ -73,9 +73,9 @@ def iterateImages(im, orig_width, orig_height, width, height):
 
 def getFrame(im, orig_width, orig_height, width, height):
   if width!=orig_width or height!=orig_height:
-      return im.resize((width,height), Image.ANTIALIAS).convert('RGB')
+    return im.resize((width,height), Image.ANTIALIAS).convert('RGB')
   else:
-      return im.convert('RGB')
+    return im.convert('RGB')
 
 def compile_speedup():
   
@@ -89,15 +89,15 @@ def compile_speedup():
   sauce = join(dirname(__file__), native)
 
   if not exists(library) or getmtime(sauce) > getmtime(library):
-      build = "gcc -fPIC -shared -o %s %s" % (library, sauce)
-      assert os.system(build + " >/dev/null 2>&1") == 0
+    build = "gcc -fPIC -shared -o %s %s" % (library, sauce)
+    assert os.system(build + " >/dev/null 2>&1") == 0
 
   xterm256_c = ctypes.cdll.LoadLibrary(library)
   xterm256_c.init()
   
   def xterm_to_rgb(xcolor):
-      res = xterm256_c.xterm_to_rgb_i(xcolor)
-      return ((res >> 16) & 0xFF, (res >> 8) & 0xFF, res & 0xFF)
+    res = xterm256_c.xterm_to_rgb_i(xcolor)
+    return ((res >> 16) & 0xFF, (res >> 8) & 0xFF, res & 0xFF)
 
   return (xterm256_c.rgb_to_xterm, xterm_to_rgb)
 
@@ -122,10 +122,10 @@ def meat_img(b64, width, height, debug):
 
   # try to speedup compiling
   try:
-      (rgb_to_xterm, xterm_to_rgb) = compile_speedup()
+    (rgb_to_xterm, xterm_to_rgb) = compile_speedup()
   except:
-      if debug:
-          print("WARNING: Failed to compile code, no speedup")
+    if debug:
+      print("WARNING: Failed to compile code, no speedup")
 
   frame = getFrame(im, orig_width, orig_height, width, height)
   printImage(frame, width, height)
