@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 from socketIO_client import SocketIO
 import re, os, sys
 from pipes import quote
