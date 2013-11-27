@@ -6,6 +6,7 @@ from pipes import quote
 from datetime import datetime
 import textwrap
 import subprocess
+import curses
 
 from meat_img import meat_img
 from logo import logo
@@ -26,6 +27,8 @@ PUNCT = ["+", "-", "=", "~", "\\", "/", "?", "<", ">", "|", "#", "@", "&", "i", 
 # Default options for rates, these can be increased by the -f param
 RATES = [160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220]
 
+curses.initscr()
+curses.nl()
 # cl tool for meatspac.es
 class CLMeats(object):
 

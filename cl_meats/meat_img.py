@@ -85,7 +85,7 @@ def compile_speedup():
   from os.path import join, dirname, getmtime, exists, expanduser
   
   library = join(dirname(__file__), '_xterm256.so')
-  library = expanduser('~/.xterm256.so')
+  # library = expanduser('~/.xterm256.so')
   sauce = join(dirname(__file__), native)
 
   if not exists(library) or getmtime(sauce) > getmtime(library):
@@ -126,7 +126,6 @@ def meat_img(b64, width, height, gif, debug):
   except:
     if debug:
       print("WARNING: Failed to compile code, no speedup")
-
 
   if str(gif)=="True":
     iterateImages(im, orig_width, orig_height, width, height)
