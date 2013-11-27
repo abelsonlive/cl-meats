@@ -4,11 +4,12 @@ from socketIO_client import SocketIO
 import re, os, sys
 from pipes import quote
 from datetime import datetime
-from colors import pretty_output
 import textwrap
+import signal
 
 from meat_img import meat_img
 from logo import logo
+from colors import pretty_output
 
 # regexes
 URLS = re.compile(r'(https?:\/\/)?((?:\.?[-\w]){1,256})(\.\w{1,10})(?::[0-9]{1,5})?(?:\.?\/(?:[^\s.,?:;!]|[.,?:;!](?!\s|$)){0,2048})?')
@@ -19,7 +20,8 @@ BRO = re.compile(r'[Bb][Rr][Oo]+')
 VOICES = ["Alex", "Bruce", "Fred", "Ralph", "Kathy", "Vicki", "Victoria", "Princess"]
 FG_COLORS = ["FG_RED", "FG_GREEN", "FG_YELLOW", "FG_BLUE", "FG_MAGENTA", "FG_CYAN",  "FG_WHITE"]
 BG_COLORS = ["BG_BLACK", "BG_RED", "BG_GREEN", "BG_YELLOW", "BG_BLUE", "BG_MAGENTA", "BG_CYAN",  "BG_WHITE"]
-PUNCT = ["+", "-", "=", "~", "\\", "/", "?", "<", ">", "|", "#", "@", "&"]
+PUNCT = ["+", "-", "=", "~", "\\", "/", "?", "<", ">", "|", "#", "@", "&", "i", "e", "a", "o", "u", "0",
+         ":", ";", "{", "}", "[", "]", "*", "%"]
 
 # Default options for rates, these can be increased by the -f param
 RATES = [160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220]
@@ -61,7 +63,7 @@ class CLMeats(object):
     self.welcome()
 
     # trigger events
-    socketIO.on('message', self.on_message)
+    socketIO.on('message', self.message_stream)
 
     # wait forever...
     socketIO.wait()
@@ -98,7 +100,7 @@ class CLMeats(object):
     
     # two punctuation symbols
     punct1 = PUNCT[bro % len(PUNCT)]
-    punct2 = PUNCT[bro % (len(PUNCT)-1)]
+    punct2 = PUNCT[bro % (len(PUNCT)-2)]
     punct = punct1 + punct2
 
     # assign voice
@@ -203,7 +205,7 @@ class CLMeats(object):
     text = URLS.sub("...link...", text)
 
     # bro hack!
-    text_to_speak = BRO.sub("broh", text)
+    text_to_speak = BRO.sub("broa", text)
 
     # say "gif" for empty message
     if text_to_speak == '':
@@ -236,9 +238,8 @@ class CLMeats(object):
     else:
       pass
 
-
-  def on_message(self, *args):
- 
+  def message_stream(self, *args):
+    
     # parse response and upsert data
     try:
 
@@ -257,7 +258,6 @@ class CLMeats(object):
         # parse speech args
         m = SPEECH_ARGS.search(text_to_speak)
         if m:
-
           voice, rate, text_to_speak = self.parse_speech_args(m, text_to_speak)
 
       # clean message
