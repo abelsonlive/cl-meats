@@ -41,7 +41,8 @@ Options:
   -b MESSAGE_BUFFER, --message-buffer=MESSAGE_BUFFER
                         wheter or not to print out the message buffer,
                         default=True
-  -g GIF, --gif=GIF     whether or not to print the image, default=True
+  -g GIF, --gif=GIF     whether or not to print the image as a series of
+                        frames, default=False
   -x WIDTH, --gif-width=WIDTH
                         width of the image, default=40
   -y HEIGHT, --gif-height=HEIGHT
