@@ -5,7 +5,7 @@ import re, os, sys
 from pipes import quote
 from datetime import datetime
 import textwrap
-import signal
+import subprocess
 
 from meat_img import meat_img
 from logo import logo
@@ -224,11 +224,11 @@ class CLMeats(object):
   def speak_message(self, voice, rate, text_to_speak):
     
     args = (quote(str(voice)), quote(str(rate)), quote(str(text_to_speak)))
-    cmd = 'say -v %s -r %s %s' % args
+    cmd = ['say', '-v', args[0], '-r', args[1], args[2]]
     if self.chorus:
-      cmd += " &"
-    os.system(cmd)
-
+      subprocess.Popen(cmd, shell=False)
+    else:
+      subprocess.call(cmd, shell=False)
 
   def handle_error(self, e):
     
