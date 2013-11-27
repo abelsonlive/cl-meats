@@ -14,7 +14,7 @@ def run():
                     help="wheter or not to print out the message buffer, default=True", default=True)
 
   parser.add_option("-g", "--gif", dest="gif",
-                    help="whether or not to print the image as a series of frames, default=True", default=True)
+                    help="whether or not to print the image as a series of frames, default=False", default=False)
 
   parser.add_option("-x", "--gif-width", dest="width",
                     help="width of the image, default=40", default=40)
