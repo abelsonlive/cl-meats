@@ -125,16 +125,15 @@ class CLMeats(object):
 
 
   def display_image(self, b64):
-    
-    if str(self.gif)=="True":
 
-      # print meat image to console
-      meat_img(
-        b64 = b64, 
-        debug = self.debug, 
-        height = self.height, 
-        width = self.width
-      )
+    # print meat image to console
+    meat_img(
+      b64 = b64, 
+      debug = self.debug, 
+      height = self.height, 
+      width = self.width,
+      gif = self.gif
+    )
 
 
   def wrap_message(self, msg):
