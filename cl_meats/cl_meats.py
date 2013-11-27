@@ -113,7 +113,6 @@ class CLMeats(object):
     return bgcol, txtcol, punct, voice, rate 
 
 
- 
   def clean_message(self, message):
     
     # remove SPEECH_ARGS from message too
@@ -214,7 +213,7 @@ class CLMeats(object):
     return text_to_speak
 
 
-  def parse_speech_args(self, m, text_to_speak):
+  def parse_speech_args(self, m, text_to_speak, voice, rate):
     
     voice = m.group(3).title().strip() if m.group(3) is not None else voice
     rate = m.group(6).strip() if m.group(6) is not None else rate
@@ -227,7 +226,7 @@ class CLMeats(object):
     args = (quote(str(voice)), quote(str(rate)), quote(str(text_to_speak)))
     cmd = 'say -v %s -r %s %s' % args
     if self.chorus:
-        cmd += " &"
+      cmd += " &"
     os.system(cmd)
 
 
@@ -237,6 +236,7 @@ class CLMeats(object):
       sys.stderr.write("ERROR: " + e.message + "\n")
     else:
       pass
+
 
   def message_stream(self, *args):
     
@@ -258,7 +258,7 @@ class CLMeats(object):
         # parse speech args
         m = SPEECH_ARGS.search(text_to_speak)
         if m:
-          voice, rate, text_to_speak = self.parse_speech_args(m, text_to_speak)
+          voice, rate, text_to_speak = self.parse_speech_args(m, text_to_speak, voice, rate)
 
       # clean message
       msg = self.clean_message(data['message'])
