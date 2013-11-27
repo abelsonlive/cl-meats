@@ -17,18 +17,19 @@ URLS = re.compile(r'(https?:\/\/)?((?:\.?[-\w]){1,256})(\.\w{1,10})(?::[0-9]{1,5
 SPEECH_ARGS = re.compile(r"(<(voice=([A-Za-z ]+))?( )?(rate=([0-9]+))?>)")
 BRO = re.compile(r'[Bb][Rr][Oo]+')
 
+
 # GLOBAL options for personalization.
-VOICES = ["Alex", "Bruce", "Fred", "Ralph", "Kathy", "Vicki", "Victoria", "Princess"]
+VOICES = ["Alex", "Bruce", "Fred", "Ralph", "Kathy", "Vicki", "Victoria", "Princess", "Agnes", "Junior"]
 FG_COLORS = ["FG_RED", "FG_GREEN", "FG_YELLOW", "FG_BLUE", "FG_MAGENTA", "FG_CYAN",  "FG_WHITE"]
 BG_COLORS = ["BG_BLACK", "BG_RED", "BG_GREEN", "BG_YELLOW", "BG_BLUE", "BG_MAGENTA", "BG_CYAN",  "BG_WHITE"]
 PUNCT = ["+", "-", "=", "~", "\\", "/", "?", "<", ">", "|", "#", "@", "&", "i", "e", "a", "o", "u", "0",
          ":", ";", "{", "}", "[", "]", "*", "%"]
 
+
 # Default options for rates, these can be increased by the -f param
 RATES = [160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220]
 
-curses.initscr()
-curses.nl()
+
 # cl tool for meatspac.es
 class CLMeats(object):
 
