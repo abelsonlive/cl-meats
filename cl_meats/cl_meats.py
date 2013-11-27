@@ -214,7 +214,7 @@ class CLMeats(object):
     return text_to_speak
 
 
-  def parse_speach_args(self, m):
+  def parse_speech_args(self, m, text_to_speak):
     
     voice = m.group(3).title().strip() if m.group(3) is not None else voice
     rate = m.group(6).strip() if m.group(6) is not None else rate
@@ -260,7 +260,7 @@ class CLMeats(object):
         m = SPEECH_ARGS.search(text_to_speak)
         if m:
 
-          voice, rate, text_to_speak = self.parse_speech_args(m)
+          voice, rate, text_to_speak = self.parse_speech_args(m, text_to_speak)
 
       # clean message
       msg = self.clean_message(data['message'])

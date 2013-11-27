@@ -62,20 +62,20 @@ def printImage(im, width, height):
         print('\x1b[0m')
 
 def iterateImages(im, orig_width, orig_height, width, height):
-
-    while True:
-        frame = getFrame(im, orig_width, orig_height, width, height)
-        printImage(frame, width, height)
-        try:
-            im.seek(im.tell()+1)
-        except EOFError:
-            break
+  
+  while True:
+    frame = getFrame(im, orig_width, orig_height, width, height)
+    printImage(frame, width, height)
+    try:
+        im.seek(im.tell()+1)
+    except EOFError:
+        break
 
 def getFrame(im, orig_width, orig_height, width, height):
-        if width!=orig_width or height!=orig_height:
-            return im.resize((width,height), Image.ANTIALIAS).convert('RGB')
-        else:
-            return im.convert('RGB')
+  if width!=orig_width or height!=orig_height:
+      return im.resize((width,height), Image.ANTIALIAS).convert('RGB')
+  else:
+      return im.convert('RGB')
 
 def compile_speedup():
     
