@@ -13,7 +13,7 @@ from logo import logo
 from colors import pretty_output
 
 # regexes
-URLS = re.compile(r'(https?:\/\/)?((?:\.?[-\w]){1,256})(\.\w{1,10})(?::[0-9]{1,5})?(?:\.?\/(?:[^\s.,?:;!]|[.,?:;!](?!\s|$)){0,2048})?')
+URLS = re.compile(r'((http|ftp|https):\/\/)?[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?')
 SPEECH_ARGS = re.compile(r"(<(voice=([A-Za-z ]+))?( )?(rate=([0-9]+))?>)")
 BRO = re.compile(r'[Bb][Rr][Oo]+')
 
@@ -208,7 +208,7 @@ class CLMeats(object):
     text = URLS.sub("...link...", text)
 
     # bro hack!
-    text_to_speak = BRO.sub("broa", text)
+    text_to_speak = BRO.sub("bro", text)
 
     # say "gif" for empty message
     if text_to_speak == '':
